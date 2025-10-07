@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const PermissionSchema = new Schema(
@@ -20,4 +21,5 @@ const PermissionSchema = new Schema(
 
 PermissionSchema.index({feature: 1, action: 1}, {unique: true});
 
-export default mongoose.model("Permission", PermissionSchema);
+const Permission = mongoose.model("Permission", PermissionSchema);
+export default Permission;

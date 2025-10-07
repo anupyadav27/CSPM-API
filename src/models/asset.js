@@ -36,4 +36,5 @@ AssetSchema.index({tenantId: 1, resourceId: 1, resourceType: 1});
 AssetSchema.index({region: 1, environment: 1});
 AssetSchema.index({lifecycleState: 1, healthStatus: 1});
 
-module.exports = mongoose.model('Asset', AssetSchema);
+const Asset = mongoose.model('Asset', AssetSchema);
+export default Asset;

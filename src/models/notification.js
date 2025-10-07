@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const NotificationSchema = new Schema(
@@ -78,4 +79,5 @@ NotificationSchema.index({tenantId: 1, userId: 1, createdAt: -1});
 NotificationSchema.index({tenantId: 1, read: 1, priority: -1, createdAt: -1});
 NotificationSchema.index({externalId: 1, source: 1});
 
-module.exports = mongoose.model('Notification', NotificationSchema);
+const Notification = mongoose.model('Notification', NotificationSchema);
+export default Notification;

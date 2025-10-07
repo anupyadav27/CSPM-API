@@ -31,4 +31,5 @@ AuditLogSchema.index({tenantId: 1, action: 1});
 AuditLogSchema.index({timestamp: -1});
 AuditLogSchema.index({entityType: 1, entityId: 1});
 
-module.exports = mongoose.model('AuditLog', AuditLogSchema);
+const AuditLog = mongoose.model('AuditLog', AuditLogSchema);
+export default AuditLog;

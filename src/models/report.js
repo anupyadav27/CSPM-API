@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const ReportSchema = new Schema(
@@ -43,4 +44,5 @@ const ReportSchema = new Schema(
 ReportSchema.index({tenantId: 1, type: 1, generatedAt: -1});
 ReportSchema.index({status: 1});
 
-module.exports = mongoose.model('Report', ReportSchema);
+const Report = mongoose.model('Report', ReportSchema);
+export default Report;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const TenantSchema = new Schema(
@@ -61,4 +62,5 @@ const TenantSchema = new Schema(
 TenantSchema.index({name: 1});
 TenantSchema.index({status: 1, plan: 1});
 
-module.exports = mongoose.model('Tenant', TenantSchema);
+const Tenant = mongoose.model('Tenant', TenantSchema);
+export default Tenant;

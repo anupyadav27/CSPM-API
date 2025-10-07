@@ -1,4 +1,4 @@
-const AWS = require("aws-sdk");
+import AWS from "aws-sdk";
 
 const connectDynamoDB = () => {
   const region = process.env.AWS_REGION;
@@ -20,9 +20,9 @@ const connectDynamoDB = () => {
   const dynamoDB = new AWS.DynamoDB();
   const documentClient = new AWS.DynamoDB.DocumentClient();
 
-  console.log(`✅ DynamoDB connected in region: ${region}`);
+  console.log(`DynamoDB connected in region: ${region}`);
 
   return { dynamoDB, documentClient };
 };
 
-module.exports = connectDynamoDB;
+export default connectDynamoDB();

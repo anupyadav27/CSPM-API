@@ -91,4 +91,5 @@ CloudConnectorSchema.index({'lastSync.status': 1});
 
 CloudConnectorSchema.index({name: 'text', 'lastSync.message': 'text'});
 
-module.exports = mongoose.model('CloudConnector', CloudConnectorSchema);
+const CloudConnector = mongoose.model('CloudConnector', CloudConnectorSchema);
+export default CloudConnector;

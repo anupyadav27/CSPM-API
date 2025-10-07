@@ -15,4 +15,5 @@ const RoleSchema = new Schema(
 
 RoleSchema.index({name: 1, tenantScoped: 1}, {unique: true});
 
-export default mongoose.model("Role", RoleSchema);
+const Role = mongoose.model("Role", RoleSchema);
+export default Role;

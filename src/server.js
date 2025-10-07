@@ -9,9 +9,9 @@ const DB_IN_USE = process.env.DB_IN_USE?.toLowerCase();
 async function startServer() {
 	try {
 		if (DB_IN_USE === "mongodb") {
-			await connectMongoDB();
+			await connectMongoDB;
 		} else if (DB_IN_USE === "dynamodb") {
-			connectDynamoDB();
+			connectDynamoDB;
 		} else {
 			throw new Error("Invalid DB_IN_USE value");
 		}

@@ -33,4 +33,5 @@ PlatformSettingsSchema.index({updatedBy: 1});
 
 PlatformSettingsSchema.index({description: 'text'});
 
-module.exports = mongoose.model('PlatformSettings', PlatformSettingsSchema);
+const PlatformSettings = mongoose.model('PlatformSettings', PlatformSettingsSchema);
+export default PlatformSettings;

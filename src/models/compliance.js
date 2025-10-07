@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const ComplianceSchema = new Schema(
@@ -35,4 +36,5 @@ ComplianceSchema.index({tenantId: 1, framework: 1, controlId: 1});
 ComplianceSchema.index({status: 1});
 ComplianceSchema.index({severity: 1});
 
-module.exports = mongoose.model('Compliance', ComplianceSchema);
+const Compliance = mongoose.model('Compliance', ComplianceSchema);
+export default Compliance;

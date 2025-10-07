@@ -42,4 +42,5 @@ ThreatSchema.index({tenantId: 1, severity: 1, status: 1});
 ThreatSchema.index({source: 1, detectedAt: -1});
 ThreatSchema.index({assetId: 1});
 
-module.exports = mongoose.model('Threat', ThreatSchema);
+const Threat = mongoose.model('Threat', ThreatSchema);
+export default Threat;

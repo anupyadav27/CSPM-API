@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const TenantUserSchema = new Schema(
@@ -41,4 +42,5 @@ TenantUserSchema.index({tenantId: 1, userId: 1}, {unique: true});
 TenantUserSchema.index({roles: 1});
 TenantUserSchema.index({status: 1});
 
-module.exports = mongoose.model('TenantUser', TenantUserSchema);
+const TenantUser = mongoose.model('TenantUser', TenantUserSchema);
+export default TenantUser;

@@ -72,4 +72,5 @@ const NotificationSettingsSchema = new Schema(
 NotificationSettingsSchema.index({tenantId: 1, userId: 1}, {unique: true, sparse: true});
 NotificationSettingsSchema.index({tenantId: 1, 'channels.webhook.enabled': 1});
 
-module.exports = mongoose.model('NotificationSettings', NotificationSettingsSchema);
+const NotificationSettings = mongoose.model('NotificationSettings', NotificationSettingsSchema);
+export default NotificationSettings;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const {Schema} = mongoose;
 
 const PolicySchema = new Schema(
@@ -55,4 +56,5 @@ const PolicySchema = new Schema(
 PolicySchema.index({tenantId: 1, category: 1, name: 1});
 PolicySchema.index({complianceStatus: 1, enforcementStatus: 1});
 
-module.exports = mongoose.model('Policy', PolicySchema);
+const Policy = mongoose.model('Policy', PolicySchema);
+export default Policy;

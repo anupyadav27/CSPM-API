@@ -58,4 +58,5 @@ const SystemSettingsSchema = new Schema(
 
 SystemSettingsSchema.index({tenantId: 1, scope: 1});
 
-module.exports = mongoose.model('SystemSettings', SystemSettingsSchema);
+const SystemSettings = mongoose.model('SystemSettings', SystemSettingsSchema);
+export default SystemSettings;

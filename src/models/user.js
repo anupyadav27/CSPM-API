@@ -53,4 +53,5 @@ const UserSchema = new Schema(
 
 UserSchema.index({email: 1, tenantId: 1});
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+export default User;
