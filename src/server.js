@@ -16,9 +16,9 @@ async function startServer() {
 			throw new Error("Invalid DB_IN_USE value");
 		}
 		
-		app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+		app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
 	} catch (err) {
-		console.error("❌ Startup error:", err.message);
+		console.error("Startup error:", err.message);
 		process.exit(1);
 	}
 }
