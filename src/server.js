@@ -1,6 +1,5 @@
 import app from "./app.js";
 import connectMongoDB from "./config/mongodb.js";
-import connectDynamoDB from "./config/dynamodb.js";
 import "dotenv/config";
 
 const PORT = process.env.PORT || 5000;
@@ -11,7 +10,7 @@ async function startServer() {
 		if (DB_IN_USE === "mongodb") {
 			await connectMongoDB;
 		} else if (DB_IN_USE === "dynamodb") {
-			connectDynamoDB;
+		
 		} else {
 			throw new Error("Invalid DB_IN_USE value");
 		}
