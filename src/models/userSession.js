@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const {Schema} = mongoose;
+const {Schema, model, models} = mongoose;
 
 const UserSessionSchema = new Schema(
 	{
@@ -38,5 +38,5 @@ const UserSessionSchema = new Schema(
 UserSessionSchema.index({userId: 1, expiresAt: 1});
 UserSessionSchema.index({revoked: 1});
 
-const UserSession = mongoose.model('UserSession', UserSessionSchema);
+const UserSession = models.UserSession || model("UserSession", UserSessionSchema);
 export default UserSession;

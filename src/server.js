@@ -2,7 +2,7 @@ import app from "./app.js";
 import connectMongoDB from "./config/mongodb.js";
 import "dotenv/config";
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 const DB_IN_USE = process.env.DB_IN_USE?.toLowerCase();
 
 async function startServer() {

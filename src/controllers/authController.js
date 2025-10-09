@@ -1,18 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-
-const generateAccessToken = (user) => {
-	return jwt.sign(
-		{id: user._id, email: user.email, roles: user.roles},
-		process.env.JWT_SECRET,
-		{expiresIn: "1h"}
-	);
-};
-
-const generateRefreshToken = (user) => {
-	return jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: "7d"});
-};
+import UserSession from "../models/userSession.js";
+import {generateAccessToken, generateRefreshToken} from "../utils/jwt.js";
 
 export const login = async (req, res) => {
 	try {
@@ -29,26 +19,38 @@ export const login = async (req, res) => {
 		if (!isMatch)
 			return res.status(401).json({message: "Invalid email or password."});
 		
-		const accessToken = generateAccessToken(user);
 		
-		if (rememberMe) {
-			const refreshToken = generateRefreshToken(user);
-			res.cookie("refreshToken", refreshToken, {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === "production",
-				sameSite: "Strict",
-				maxAge: 7 * 24 * 60 * 60 * 1000,
-			});
-		}
+		const expiryDelta = rememberMe ? 24 * 3600 * 1000 : 3600 * 1000;
+		const expiresAt = new Date(Date.now() + expiryDelta);
+		
+		const accessToken = generateAccessToken(user);
+		const refreshToken = generateRefreshToken(user);
+		res.cookie("refreshToken", refreshToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "Strict",
+			maxAge: expiresAt,
+		});
 		
 		user.lastLogin = new Date();
 		await user.save();
+		
+		const session = await UserSession.create({
+			userId: user._id,
+			tenantId: user.tenantId || null,
+			token: accessToken,
+			refreshToken: refreshToken || null,
+			loginMethod: "local",
+			expiresAt: expiresAt,
+			ipAddress: req.ip,
+			userAgent: req.headers["user-agent"],
+		});
+		
 		
 		return res.status(200).json({
 			message: "Login successful",
 			token: accessToken,
 			expiresIn: "1h",
-			rememberMe,
 			user: {
 				id: user._id,
 				email: user.email,
@@ -101,6 +103,37 @@ export const refreshAccessToken = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-	res.clearCookie("refreshToken");
-	res.json({message: "Logged out successfully"});
+	try {
+		const refreshToken = req.cookies?.refreshToken;
+		
+		if (refreshToken) {
+			const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+			
+			await UserSession.deleteOne({userId: decoded.id, refreshToken});
+			
+			const lastSession = await UserSession.findOne({userId: decoded.id}).sort({createdAt: -1});
+			const loginMethod = lastSession?.loginMethod || "local";
+			
+			res.clearCookie("refreshToken", {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "production",
+				sameSite: "Strict",
+			});
+			
+			if (loginMethod === "saml") {
+				const logoutUrl = `${process.env.OKTA_LOGOUT_URL}?id_token_hint=${refreshToken}&post_logout_redirect_uri=${process.env.FRONTEND_URL}/auth/login`;
+				return res.status(200).json({
+					message: "SSO logout required",
+					redirectUrl: logoutUrl,
+					sso: true,
+				});
+			}
+		}
+		
+		return res.status(200).json({message: "Logout successful", sso: false});
+	} catch (error) {
+		console.error("Logout error:", error);
+		return res.status(200).json({message: "Logout successful (fallback)", sso: false});
+	}
 };
+

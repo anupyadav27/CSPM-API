@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const {Schema} = mongoose;
+
+const {Schema, model, models} = mongoose;
 
 const RoleEnum = ['super_admin', 'admin', 'tenant_admin', 'user', 'read_only'];
 
@@ -53,5 +54,5 @@ const UserSchema = new Schema(
 
 UserSchema.index({email: 1, tenantId: 1});
 
-const User = mongoose.model('User', UserSchema);
+const User = models.User || model("User", UserSchema);
 export default User;
