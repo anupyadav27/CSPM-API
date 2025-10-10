@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const {Schema, model, models} = mongoose;
 
-const RoleEnum = ['super_admin', 'admin', 'tenant_admin', 'user', 'read_only'];
+const RoleEnum = ['tenant_admin', 'user', 'read_only', 'auditor', 'custom','admin','super_admin'];
 
 const UserSchema = new Schema(
 	{

@@ -8,7 +8,7 @@ const TenantUserSchema = new Schema(
 		userId: {type: Schema.Types.ObjectId, ref: 'User', required: true, index: true},
 		
 		roles: {
-			type: [{type: String, enum: ['tenant_admin', 'user', 'read_only', 'auditor', 'custom']}],
+			type: [{type: String, enum: ['tenant_admin', 'user', 'read_only', 'auditor', 'custom','admin','super_admin']}],
 			default: ['user'],
 		},
 		

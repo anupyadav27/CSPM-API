@@ -11,7 +11,6 @@ const TenantSchema = new Schema(
 			type: String,
 			enum: ['active', 'inactive', 'pending', 'suspended'],
 			default: 'active',
-			index: true,
 		},
 		
 		plan: {
