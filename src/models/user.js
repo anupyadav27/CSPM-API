@@ -6,8 +6,7 @@ const RoleEnum = ['tenant_admin', 'user', 'read_only', 'auditor', 'custom','admi
 
 const UserSchema = new Schema(
 	{
-		tenantId: {type: Schema.Types.ObjectId, ref: 'Tenant', index: true},
-		email: {type: String, required: true, unique: true, lowercase: true, trim: true},
+		email: {type: String, required: true, lowercase: true, trim: true},
 		passwordHash: {type: String, select: false},
 		ssoProvider: {type: String, default: null},
 		ssoId: {type: String, default: null},
@@ -52,7 +51,7 @@ const UserSchema = new Schema(
 	{timestamps: true}
 );
 
-UserSchema.index({email: 1, tenantId: 1});
+UserSchema.index({ email: 1 }, { unique: true });
 
 const User = models.User || model("User", UserSchema);
 export default User;

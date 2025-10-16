@@ -4,7 +4,7 @@ const {Schema} = mongoose;
 
 const TenantSchema = new Schema(
 	{
-		name: {type: String, required: true, unique: true, trim: true},
+		name: {type: String, required: true, trim: true},
 		description: {type: String, trim: true},
 		
 		status: {
@@ -58,7 +58,7 @@ const TenantSchema = new Schema(
 	{timestamps: true}
 );
 
-TenantSchema.index({name: 1});
+TenantSchema.index({name: 1},{unique:true});
 TenantSchema.index({status: 1, plan: 1});
 
 const Tenant = mongoose.model('Tenant', TenantSchema);

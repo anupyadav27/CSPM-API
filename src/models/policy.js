@@ -44,7 +44,6 @@ const PolicySchema = new Schema(
 		],
 		
 		linkedAssets: [{type: Schema.Types.ObjectId, ref: 'Asset'}],
-		linkedComplianceControls: [{type: Schema.Types.ObjectId, ref: 'Compliance'}],
 		
 		createdBy: {type: Schema.Types.ObjectId, ref: 'User', required: true},
 		updatedBy: {type: Schema.Types.ObjectId, ref: 'User'},

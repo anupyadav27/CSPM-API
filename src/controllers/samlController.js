@@ -58,6 +58,10 @@ export const samlAcs = async (req, res) => {
 			});
 		}
 		
+		if (user) {
+			await UserSession.deleteMany({userId: user._id});
+		}
+		
 		const accessToken = generateAccessToken(user);
 		
 		
@@ -81,6 +85,7 @@ export const samlAcs = async (req, res) => {
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "Strict",
 			maxAge: 24 * 60 * 60 * 1000,
+			path:"/api/auth/refresh"
 		});
 		
 		

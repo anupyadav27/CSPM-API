@@ -22,10 +22,6 @@ const AssetSchema = new Schema(
 		
 		healthStatus: {type: String, enum: ['healthy', 'warning', 'critical', 'unknown'], default: 'unknown'},
 		metrics: {type: Schema.Types.Mixed, default: {}},
-		alerts: [{type: Schema.Types.ObjectId, ref: 'Threat'}],
-		
-		vulnerabilities: [{type: Schema.Types.ObjectId, ref: 'Vulnerability'}],
-		complianceControls: [{type: Schema.Types.ObjectId, ref: 'Compliance'}],
 		
 		metadata: {type: Schema.Types.Mixed, default: {}},
 	},

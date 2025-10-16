@@ -5,6 +5,7 @@ const {Schema} = mongoose;
 const ComplianceSchema = new Schema(
 	{
 		tenantId: {type: Schema.Types.ObjectId, ref: 'Tenant', required: true, index: true},
+		assetId: { type: Schema.Types.ObjectId, ref: "Asset", required: true },
 		framework: {
 			type: String,
 			enum: ['CIS', 'PCI-DSS', 'ISO27001', 'HIPAA', 'SOC2', 'Custom'],
