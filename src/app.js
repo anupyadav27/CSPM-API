@@ -6,6 +6,8 @@ import "dotenv/config";
 
 import authRoutes from "./routes/authRoutes.js";
 import samlRoutes from "./routes/samlRoutes.js";
+import testRoutes from "./routes/testRoutes.js";
+import tenantRoutes from "./routes/tenantRoutes.js";
 
 
 const app = express();
@@ -26,7 +28,8 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/saml", samlRoutes);
-
+// app.use("/api", testRoutes)
+app.use("/api", tenantRoutes)
 app.use((req, res) => {
 	console.warn("Route not found:", req.originalUrl);
 	res.status(404).json({error: "Route not found"});

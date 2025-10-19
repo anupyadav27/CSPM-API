@@ -20,27 +20,28 @@ export const login = async (req, res) => {
 		if (user && isMatch) {
 			await UserSession.deleteMany({userId: user._id});
 		}
-		
-		const expiryDelta = rememberMe ? 24 * 3600 * 1000 : 3600 * 1000;
+		const expiryDelta = rememberMe ? 7 * 24 * 60 * 60 * 1000 : 3600 * 1000;
 		const expiresAt = new Date(Date.now() + expiryDelta);
 		
 		const accessToken = generateAccessToken(user);
 		const refreshToken = generateRefreshToken(user);
 		
-		res.cookie("refreshToken", refreshToken, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
-			sameSite: "Strict",
-			maxAge: 7 * 24 * 60 * 60 * 1000,
-			path: "/api/auth/refresh",
-		});
+		if (rememberMe) {
+			res.cookie("refreshToken", refreshToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "production",
+				sameSite: "Strict",
+				maxAge: 7 * 24 * 60 * 60 * 1000,
+				path: "/api/auth/refresh",
+			});
+		}
+		
 		
 		res.cookie("accessToken", accessToken, {
 			httpOnly: false,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "Strict",
-			maxAge: expiryDelta,
-			path: "/",
+			maxAge: 3600 * 1000,
 		});
 		
 		user.lastLogin = new Date();
@@ -59,7 +60,6 @@ export const login = async (req, res) => {
 		
 		return res.status(200).json({
 			message: "Login successful",
-			token: accessToken,
 			expiresIn: "1h",
 			user: {
 				id: user._id,
@@ -99,7 +99,6 @@ export const refreshAccessToken = async (req, res) => {
 		
 		return res.status(200).json({
 			message: "Token refreshed successfully",
-			token: accessToken,
 			expiresIn: "1h",
 			user: {
 				id: user._id,

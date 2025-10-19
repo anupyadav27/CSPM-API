@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const {Schema} = mongoose;
+const {Schema,models,model} = mongoose;
 
 const AuditLogSchema = new Schema(
 	{
@@ -31,5 +31,5 @@ AuditLogSchema.index({tenantId: 1, action: 1});
 AuditLogSchema.index({timestamp: -1});
 AuditLogSchema.index({entityType: 1, entityId: 1});
 
-const AuditLog = mongoose.model('AuditLog', AuditLogSchema);
+const AuditLog = models.AuditLog || model('AuditLog', AuditLogSchema);
 export default AuditLog;
