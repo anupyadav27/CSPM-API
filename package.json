@@ -1,31 +1,43 @@
 {
-	"name": "cspm_api",
-	"version": "1.0.0",
-	"type": "module",
-	"main": "src/server.js",
-	"scripts": {
-		"start": "node src/server.js",
-		"dev": "nodemon src/server.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"description": "",
-	"devDependencies": {
-		"nodemon": "^3.1.10"
-	},
-	"dependencies": {
-		"aws-sdk": "^2.1692.0",
-		"bcryptjs": "^3.0.2",
-		"body-parser": "^2.2.0",
-		"cookie-parser": "^1.4.7",
-		"cors": "^2.8.5",
-		"dotenv": "^17.2.3",
-		"express": "^5.1.0",
-		"jsonwebtoken": "^9.0.2",
-		"mongoose": "^8.18.3",
-		"morgan": "^1.10.1",
-		"passport-saml": "^3.2.4"
-	}
+    "name": "cspm_api",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "csv-parser": "^3.2.0",
+        "eslint": "^9.38.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-promise": "^7.2.1",
+        "eslint-plugin-security": "^3.0.1",
+        "nodemon": "^3.1.10",
+        "prettier": "^3.6.2"
+    },
+    "dependencies": {
+        "@eslint/js": "^9.38.0",
+        "bcryptjs": "^3.0.2",
+        "body-parser": "^2.2.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.1.0",
+        "faker-js": "^1.0.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.18.3",
+        "morgan": "^1.10.1",
+        "passport-saml": "^3.2.4"
+    }
 }

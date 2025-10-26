@@ -1,25 +1,20 @@
 import crypto from "crypto";
 
-import userServices from "../services/userServices.js";
+import secOpsServices from "../services/secOpsServices.js";
 
-export const getAllUsersController = async (req, res) => {
+export const getAllSecOpsController = async (req, res) => {
     try {
-        const rawFilters = { ...req.query };
         const filters = {};
-        delete rawFilters.page;
-        delete rawFilters.pageSize;
+        if (req.query.tenantId) filters.tenantId = req.query.tenantId;
 
-        if (rawFilters.tenantId) filters.tenantId = rawFilters.tenantId;
-
-        const result = await userServices().getAllUsers(filters, req.pagination);
+        const result = await secOpsServices().getAllSecOps(filters, req.pagination);
 
         const jsonResponse = {
             success: true,
-            message: "User Fetched Successfully",
-            data: result.users,
+            message: "SecOps Fetched Successfully",
+            data: result.issues,
             pagination: result.pagination,
         };
-
         const etag = crypto.createHash("md5").update(JSON.stringify(result)).digest("hex");
 
         const clientETag = req.headers["if-none-match"];
@@ -36,7 +31,7 @@ export const getAllUsersController = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Failed to fetch users",
+            message: "Failed to fetch issues",
             error: error.message,
         });
     }
