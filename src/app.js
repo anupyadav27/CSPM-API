@@ -14,6 +14,9 @@ import vulnerabilityRoutes from "./routes/vulnerabilityRoutes.js";
 import complianceRoutes from "./routes/complianceRoutes.js";
 import threatRoutes from "./routes/threatRoutes.js";
 import secOpsRoutes from "./routes/secOpsRoutes.js";
+import policyRoutes from "./routes/policyRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 const app = express();
 
@@ -39,6 +42,9 @@ app.use("/api", vulnerabilityRoutes);
 app.use("/api", complianceRoutes);
 app.use("/api", threatRoutes);
 app.use("/api", secOpsRoutes);
+app.use("/api", policyRoutes);
+app.use("/api", reportRoutes);
+app.use("/api", notificationRoutes);
 app.use((req, res) => {
     console.warn("Route not found:", req.originalUrl);
     res.status(404).json({ error: "Route not found" });
