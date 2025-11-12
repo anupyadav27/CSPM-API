@@ -1,4 +1,5 @@
 import _sequelize from "sequelize";
+
 const { Model, Sequelize } = _sequelize;
 
 export default class user_sessions extends Model {
@@ -15,14 +16,6 @@ export default class user_sessions extends Model {
                     allowNull: false,
                     references: {
                         model: "users",
-                        key: "id",
-                    },
-                },
-                tenant_id: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    references: {
-                        model: "tenants",
                         key: "id",
                     },
                 },
@@ -78,6 +71,10 @@ export default class user_sessions extends Model {
                     type: DataTypes.DATE,
                     allowNull: true,
                     defaultValue: Sequelize.Sequelize.fn("now"),
+                },
+                session_index: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
                 },
             },
             {

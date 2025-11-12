@@ -1,5 +1,6 @@
 import _sequelize from "sequelize";
-const { Model, Sequelize } = _sequelize;
+
+const { Model } = _sequelize;
 
 export default class report_compliance extends Model {
     static init(sequelize, DataTypes) {

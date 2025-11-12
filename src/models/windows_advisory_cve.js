@@ -1,5 +1,6 @@
 import _sequelize from "sequelize";
-const { Model, Sequelize } = _sequelize;
+
+const { Model } = _sequelize;
 
 export default class windows_advisory_cve extends Model {
     static init(sequelize, DataTypes) {

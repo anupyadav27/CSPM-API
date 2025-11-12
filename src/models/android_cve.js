@@ -1,4 +1,5 @@
 import _sequelize from "sequelize";
+
 const { Model, Sequelize } = _sequelize;
 
 export default class android_cve extends Model {

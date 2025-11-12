@@ -49,7 +49,6 @@ export default [
             "promise/no-nesting": "warn",
             "promise/prefer-await-to-then": "warn",
 
-            // "security/detect-non-literal-fs-filename": "warn",
             "security/detect-eval-with-expression": "error",
 
             "prettier/prettier": [
@@ -61,6 +60,18 @@ export default [
                     printWidth: 100,
                     tabWidth: 4,
                     endOfLine: "auto",
+                },
+            ],
+
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector: "LineComment",
+                    message: "Comments are not allowed",
+                },
+                {
+                    selector: "BlockComment",
+                    message: "Comments are not allowed",
                 },
             ],
         },

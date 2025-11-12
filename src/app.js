@@ -2,7 +2,10 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
 import "dotenv/config";
+import authRoutes from "./routes/authRoutes.js";
+import samlRoutes from "./routes/samlRoutes.js";
 
 const app = express();
 
@@ -13,10 +16,15 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL || "http://localhost:3000",
+        origin: "http://localhost:3000",
         credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
+
+app.use("/api/auth", authRoutes);
+app.use("/api/auth/saml", samlRoutes);
 
 app.use((req, res) => {
     console.warn("Route not found:", req.originalUrl);

@@ -1,5 +1,6 @@
 import _sequelize from "sequelize";
-const { Model, Sequelize } = _sequelize;
+
+const { Model } = _sequelize;
 
 export default class connector_health_issues extends Model {
     static init(sequelize, DataTypes) {

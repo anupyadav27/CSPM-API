@@ -9,7 +9,7 @@
 	"arrowParens": "always",
 	"overrides": [
 		{
-			"files": ["*.js", "*.ts", "*.tsx", "*.jsx"],
+			"files": ["*.js", "*.ts", "*.tsx", "*.jsx", "*.gitignore"],
 			"options": {
 				"useTabs": false,
 				"tabWidth": 4

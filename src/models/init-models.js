@@ -1,7 +1,6 @@
 import _sequelize from "sequelize";
 
 const DataTypes = _sequelize.DataTypes;
-
 import _agents from "./agents.js";
 import _android_advisory from "./android_advisory.js";
 import _android_cve from "./android_cve.js";
@@ -417,8 +416,6 @@ export default function initModels(sequelize) {
     tenants.hasMany(tenant_users, { as: "tenant_users", foreignKey: "tenant_id" });
     threats.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
     tenants.hasMany(threats, { as: "threats", foreignKey: "tenant_id" });
-    user_sessions.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
-    tenants.hasMany(user_sessions, { as: "user_sessions", foreignKey: "tenant_id" });
     user_tenant_roles.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
     tenants.hasMany(user_tenant_roles, { as: "user_tenant_roles", foreignKey: "tenant_id" });
     asset_threats.belongsTo(threats, { as: "threat", foreignKey: "threat_id" });
