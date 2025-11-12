@@ -31,6 +31,9 @@ temp/
 .env.test.local
 .env.production.local
 
+auto-config.json
+okta.cert
+
 .vscode/
 .idea/
 *.suo
@@ -47,3 +50,5 @@ Thumbs.db
 
 /test/
 /scripts/
+
+
