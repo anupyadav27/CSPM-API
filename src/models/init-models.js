@@ -279,7 +279,7 @@ export default function initModels(sequelize) {
     android_cve.belongsTo(android_advisory, { as: "advisory", foreignKey: "advisory_id" });
     android_advisory.hasMany(android_cve, { as: "android_cves", foreignKey: "advisory_id" });
     asset_compliance.belongsTo(assets, { as: "asset", foreignKey: "asset_id" });
-    assets.hasMany(asset_compliance, { as: "asset_compliances", foreignKey: "asset_id" });
+    assets.hasMany(asset_compliance, { as: "asset_compliance", foreignKey: "asset_id" });
     asset_tags.belongsTo(assets, { as: "asset", foreignKey: "asset_id" });
     assets.hasMany(asset_tags, { as: "asset_tags", foreignKey: "asset_id" });
     asset_threats.belongsTo(assets, { as: "asset", foreignKey: "asset_id" });
@@ -299,7 +299,7 @@ export default function initModels(sequelize) {
         foreignKey: "connector_id",
     });
     asset_compliance.belongsTo(compliance, { as: "compliance", foreignKey: "compliance_id" });
-    compliance.hasMany(asset_compliance, { as: "asset_compliances", foreignKey: "compliance_id" });
+    compliance.hasMany(asset_compliance, { as: "asset_compliance", foreignKey: "compliance_id" });
     compliance_remediation_steps.belongsTo(compliance, {
         as: "compliance",
         foreignKey: "compliance_id",
@@ -381,42 +381,42 @@ export default function initModels(sequelize) {
     roles.hasMany(role_permissions, { as: "role_permissions", foreignKey: "role_id" });
     scan_vulnerabilities.belongsTo(scans, { as: "scan", foreignKey: "scan_id" });
     scans.hasMany(scan_vulnerabilities, { as: "scan_vulnerabilities", foreignKey: "scan_id" });
-    agents.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    agents.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(agents, { as: "agents", foreignKey: "tenant_id" });
-    assets.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    assets.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(assets, { as: "assets", foreignKey: "tenant_id" });
-    audit_logs.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    audit_logs.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(audit_logs, { as: "audit_logs", foreignKey: "tenant_id" });
-    cloud_connectors.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    cloud_connectors.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(cloud_connectors, { as: "cloud_connectors", foreignKey: "tenant_id" });
-    compliance.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    compliance.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(compliance, { as: "compliances", foreignKey: "tenant_id" });
-    cve_update_marker.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    cve_update_marker.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(cve_update_marker, { as: "cve_update_markers", foreignKey: "tenant_id" });
-    notification_settings.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    notification_settings.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(notification_settings, {
         as: "notification_settings",
         foreignKey: "tenant_id",
     });
-    notifications.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    notifications.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(notifications, { as: "notifications", foreignKey: "tenant_id" });
-    pkg_database.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    pkg_database.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(pkg_database, { as: "pkg_databases", foreignKey: "tenant_id" });
-    policies.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    policies.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(policies, { as: "policies", foreignKey: "tenant_id" });
-    reports.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    reports.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(reports, { as: "reports", foreignKey: "tenant_id" });
-    scan_vulnerabilities.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    scan_vulnerabilities.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(scan_vulnerabilities, { as: "scan_vulnerabilities", foreignKey: "tenant_id" });
-    scans.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    scans.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(scans, { as: "scans", foreignKey: "tenant_id" });
-    system_settings.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    system_settings.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(system_settings, { as: "system_settings", foreignKey: "tenant_id" });
-    tenant_users.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    tenant_users.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(tenant_users, { as: "tenant_users", foreignKey: "tenant_id" });
-    threats.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    threats.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(threats, { as: "threats", foreignKey: "tenant_id" });
-    user_tenant_roles.belongsTo(tenants, { as: "tenant", foreignKey: "tenant_id" });
+    user_tenant_roles.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(user_tenant_roles, { as: "user_tenant_roles", foreignKey: "tenant_id" });
     asset_threats.belongsTo(threats, { as: "threat", foreignKey: "threat_id" });
     threats.hasMany(asset_threats, { as: "asset_threats", foreignKey: "threat_id" });

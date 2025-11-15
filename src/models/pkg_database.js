@@ -107,12 +107,7 @@ export default class pkg_database extends Model {
                     {
                         name: "pkg_database_unique",
                         unique: true,
-                        fields: [
-                            { name: "pkg_name" },
-                            { name: "vendor" },
-                            { name: "version" },
-                            { name: "release" },
-                        ],
+                        fields: [{ name: "pkg_name" }, { name: "vendor" }, { name: "version" }, { name: "release" }],
                     },
                     {
                         name: "pkg_database_unique_pkg_vendor_version",

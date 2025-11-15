@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Buffer } from "buffer";
 
 import { models } from "../config/db.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/tokenUtils.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/token-utils.js";
 import { saml } from "../utils/saml.js";
 
 export const samlLoginController = async (req, res) => {
@@ -128,11 +128,7 @@ export const samlLogoutCallbackController = async (req, res) => {
             }
 
             const logoutResponse = saml._generateLogoutResponse(sloProfile, true);
-            const redirectAfterSlo =
-                RelayState ||
-                process.env.SAML_LOGOUT_REDIRECT_URL ||
-                process.env.FRONTEND_URL ||
-                "http://localhost:3000/login";
+            const redirectAfterSlo = RelayState || process.env.SAML_LOGOUT_REDIRECT_URL || process.env.FRONTEND_URL || "http://localhost:3000/login";
 
             const sloEndpoint = process.env.OKTA_ENTRYPOINT?.replace("/sso/saml", "/slo/saml");
 
@@ -143,10 +139,7 @@ export const samlLogoutCallbackController = async (req, res) => {
                 <head><title>Logging out...</title></head>
                 <body>
                     <form method="post" action="${sloEndpoint}">
-                        // eslint-disable-next-line no-undef
-                        <input type="hidden" name="SAMLResponse" value="${Buffer.from(
-                            logoutResponse
-                        ).toString("base64")}" />
+                        <input type="hidden" name="SAMLResponse" value="${Buffer.from(logoutResponse).toString("base64")}" />
                         <input type="hidden" name="RelayState" value="${redirectAfterSlo}" />
                         <noscript>
                             <p>Click below to complete logout.</p>
@@ -181,11 +174,7 @@ export const samlLogoutCallbackController = async (req, res) => {
                 path: "/api/auth/refresh",
             });
 
-            const redirectUrl =
-                RelayState ||
-                process.env.SAML_LOGOUT_REDIRECT_URL ||
-                process.env.FRONTEND_URL ||
-                "http://localhost:3000";
+            const redirectUrl = RelayState || process.env.SAML_LOGOUT_REDIRECT_URL || process.env.FRONTEND_URL || "http://localhost:3000";
 
             console.log(`Redirecting user to: ${redirectUrl}`);
             return res.redirect(redirectUrl);

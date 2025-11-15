@@ -57,7 +57,7 @@ export default [
                     singleQuote: false,
                     trailingComma: "es5",
                     semi: true,
-                    printWidth: 100,
+                    printWidth: 150,
                     tabWidth: 4,
                     endOfLine: "auto",
                 },

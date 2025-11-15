@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 import authRoutes from "./routes/authRoutes.js";
 import samlRoutes from "./routes/samlRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/saml", samlRoutes);
+app.use("/api", assetRoutes);
 
 app.use((req, res) => {
     console.warn("Route not found:", req.originalUrl);
@@ -32,7 +34,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res) => {
-    console.error("SERVER ERROR:", err.stack);
+    console.info("SERVER ERROR:", err.stack);
     res.status(500).json({ error: "Something went wrong!" });
 });
 

@@ -1,10 +1,6 @@
 import express from "express";
 
-import {
-    loginController,
-    logoutController,
-    refreshAccessTokenController,
-} from "../controllers/authController.js";
+import { loginController, logoutController, refreshAccessTokenController } from "../controllers/authController.js";
 
 const router = express.Router();
 

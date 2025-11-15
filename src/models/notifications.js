@@ -193,20 +193,11 @@ export default class notifications extends Model {
                     },
                     {
                         name: "idx_notifications_tenant_read_priority",
-                        fields: [
-                            { name: "tenant_id" },
-                            { name: "read" },
-                            { name: "priority", order: "DESC" },
-                            { name: "created_at", order: "DESC" },
-                        ],
+                        fields: [{ name: "tenant_id" }, { name: "read" }, { name: "priority", order: "DESC" }, { name: "created_at", order: "DESC" }],
                     },
                     {
                         name: "idx_notifications_tenant_user_created",
-                        fields: [
-                            { name: "tenant_id" },
-                            { name: "user_id" },
-                            { name: "created_at", order: "DESC" },
-                        ],
+                        fields: [{ name: "tenant_id" }, { name: "user_id" }, { name: "created_at", order: "DESC" }],
                     },
                     {
                         name: "notifications_pkey",

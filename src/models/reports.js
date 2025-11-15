@@ -120,11 +120,7 @@ export default class reports extends Model {
                     },
                     {
                         name: "idx_reports_tenant_type_generated",
-                        fields: [
-                            { name: "tenant_id" },
-                            { name: "type" },
-                            { name: "generated_at", order: "DESC" },
-                        ],
+                        fields: [{ name: "tenant_id" }, { name: "type" }, { name: "generated_at", order: "DESC" }],
                     },
                     {
                         name: "reports_pkey",

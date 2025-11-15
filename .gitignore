@@ -33,6 +33,7 @@ temp/
 
 auto-config.json
 okta.cert
+migrate.ps1
 
 .vscode/
 .idea/
@@ -52,3 +53,4 @@ Thumbs.db
 /scripts/
 
 
+/src/seeders/

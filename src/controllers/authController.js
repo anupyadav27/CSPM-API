@@ -2,12 +2,7 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
 import { models } from "../config/db.js";
-import {
-    generateAccessToken,
-    generateRefreshToken,
-    verifyRefreshToken,
-    verifyAccessToken,
-} from "../utils/tokenUtils.js";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken, verifyAccessToken } from "../utils/token-utils.js";
 import cookieServices from "../services/cookieServices.js";
 import cacheServices from "../services/cacheServices.js";
 import { saml } from "../utils/saml.js";
@@ -225,9 +220,7 @@ export const logoutController = async (req, res) => {
         cookieServices.clearAuthCookies(res);
 
         if (loginMethod === "saml" && userSession) {
-            console.log(
-                `Initiating SAML SLO for user session ID ${userSession.id} (user ID: ${userId})`
-            );
+            console.log(`Initiating SAML SLO for user session ID ${userSession.id} (user ID: ${userId})`);
 
             try {
                 const user = await models.users.findByPk(userId, { attributes: ["email"] });
@@ -246,11 +239,7 @@ export const logoutController = async (req, res) => {
                     sessionIndex: userSession.session_index,
                 };
 
-                const logoutUrl = await saml.getLogoutUrlAsync(
-                    samlUser,
-                    process.env.SAML_LOGOUT_REDIRECT_URL || process.env.FRONTEND_URL,
-                    {}
-                );
+                const logoutUrl = await saml.getLogoutUrlAsync(samlUser, process.env.SAML_LOGOUT_REDIRECT_URL || process.env.FRONTEND_URL, {});
 
                 if (!logoutUrl.startsWith("http")) {
                     throw new Error("Invalid SAML logout URL generated.");
@@ -275,8 +264,7 @@ export const logoutController = async (req, res) => {
         if (loginMethod === "saml" && !userSession) {
             console.info("SAML logout requested but session details unavailable.");
             return res.status(200).json({
-                message:
-                    "Cookies cleared, but SAML SSO logout could not be initiated due to missing session details.",
+                message: "Cookies cleared, but SAML SSO logout could not be initiated due to missing session details.",
                 sso: true,
                 sso_error: "Missing session identification for SAML SLO.",
             });

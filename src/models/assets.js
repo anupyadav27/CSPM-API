@@ -101,11 +101,7 @@ export default class assets extends Model {
                     {
                         name: "idx_assets_tenant_resource",
                         unique: true,
-                        fields: [
-                            { name: "tenant_id" },
-                            { name: "resource_id" },
-                            { name: "resource_type" },
-                        ],
+                        fields: [{ name: "tenant_id" }, { name: "resource_id" }, { name: "resource_type" }],
                     },
                 ],
             }

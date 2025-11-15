@@ -7,13 +7,13 @@ let cert = "";
 
 try {
     if (!fs.existsSync(certPath)) {
-        console.info(`[SAML] ⚠️  Certificate file not found at: ${certPath}`);
+        console.info(`[SAML] Certificate file not found at: ${certPath}`);
     } else {
         cert = fs.readFileSync(certPath, "utf-8");
-        console.log(`[SAML] ✅  Certificate loaded from: ${certPath}`);
+        console.log(`[SAML] Certificate loaded from: ${certPath}`);
     }
 } catch (err) {
-    console.info("[SAML] ❌ Failed to load Okta certificate:", err);
+    console.info("[SAML] Failed to load Okta certificate:", err);
 }
 
 export const saml = new SAML({
@@ -31,10 +31,7 @@ export const saml = new SAML({
     logoutUrl: process.env.OKTA_LOGOUT,
     logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL,
     additionalParams: {
-        RelayState:
-            process.env.SAML_LOGOUT_REDIRECT_URL ||
-            process.env.FRONTEND_URL ||
-            "http://localhost:3000/login",
+        RelayState: process.env.SAML_LOGOUT_REDIRECT_URL || process.env.FRONTEND_URL || "http://localhost:3000/login",
     },
 
     audience: process.env.SAML_AUDIENCE,

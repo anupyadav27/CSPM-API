@@ -96,11 +96,7 @@ export default class compliance extends Model {
                     {
                         name: "idx_compliance_tenant_framework_control",
                         unique: true,
-                        fields: [
-                            { name: "tenant_id" },
-                            { name: "framework" },
-                            { name: "control_id" },
-                        ],
+                        fields: [{ name: "tenant_id" }, { name: "framework" }, { name: "control_id" }],
                     },
                 ],
             }
