@@ -13,9 +13,6 @@ const assetServices = () => {
     const getAllAssets = async (filters = {}, pagination = {}, searchFields = {}, sort = { created_at: "DESC" }) => {
         try {
             const { where, joinKeys } = buildFilters(filters, searchFields);
-            console.log(JSON.stringify(filters));
-            console.log(JSON.stringify(searchFields));
-            console.log(JSON.stringify(buildFilters(filters, searchFields)));
 
             for (const key of Object.keys(sort)) {
                 const { associationPath } = parseNestedField(key);
@@ -158,156 +155,151 @@ const assetServices = () => {
         const tagFilters = { tag_key: tagKey };
         if (tagValue) tagFilters.tag_value = tagValue;
 
-        const queryOptions = {
-            include: [
-                ASSOCIATION_MAP.tenants,
-                { ...ASSOCIATION_MAP.asset_tags, where: tagFilters, required: true },
-                ASSOCIATION_MAP.asset_compliance,
-                ASSOCIATION_MAP.asset_threats,
-            ],
-            where: { ...filters },
-            order: [],
-            limit: pagination.enabled ? pagination.pageSize : undefined,
-            offset: pagination.enabled ? pagination.skip : undefined,
-        };
+        const { where, joinKeys } = buildFilters(filters, searchFields);
 
-        const sortFields = buildOrderClause(sort);
-        queryOptions.order = sortFields;
-
-        const searchConditions = [];
-        for (const [key, value] of Object.entries(searchFields)) {
-            if (value && value.trim() !== "") {
-                const fieldPath = key.replace("_search", "");
-                searchConditions.push({
-                    [fieldPath]: { [Op.iLike]: `%${value.trim()}%` },
-                });
-            }
+        for (const key of Object.keys(sort)) {
+            const { associationPath } = parseNestedField(key);
+            if (associationPath.length > 0) joinKeys.add(associationPath[0]);
         }
-        if (searchConditions.length > 0) queryOptions.where[Op.and] = searchConditions;
 
-        const { count, rows: assets } = await models.assets.findAndCountAll(queryOptions);
+        joinKeys.add("tenants");
+        joinKeys.add("asset_tags");
 
-        const total = count;
-        const totalPages = pagination.enabled ? Math.ceil(total / pagination.pageSize) : 1;
-        const currentPage = pagination.enabled ? Math.floor(pagination.skip / pagination.pageSize) + 1 : 1;
+        const include = buildIncludes(joinKeys);
+
+        const tagInclude = include.find((i) => i.as === "asset_tags");
+        if (tagInclude) {
+            tagInclude.where = tagFilters;
+            tagInclude.required = true;
+        }
+
+        const order = buildOrderClause(sort);
+
+        const limit = pagination.enabled ? pagination.pageSize : undefined;
+        const offset = pagination.enabled ? pagination.skip : undefined;
+
+        const { count, rows: assets } = await models.assets.findAndCountAll({
+            where,
+            include,
+            order,
+            limit,
+            offset,
+            distinct: true,
+        });
+
+        const totalPages = pagination.enabled ? Math.ceil(count / pagination.pageSize) : 1;
 
         return {
             assets,
             pagination: {
-                total,
-                pageSize: pagination.enabled ? pagination.pageSize : total,
-                currentPage,
+                total: count,
+                currentPage: pagination.enabled ? Math.floor(offset / limit) + 1 : 1,
                 totalPages,
+                pageSize: pagination.enabled ? limit : count,
             },
         };
     };
 
     const getAssetsByCompliance = async (complianceId, filters = {}, pagination = {}, searchFields = {}, sort = { created_at: "DESC" }) => {
-        const queryOptions = {
-            include: [
-                ASSOCIATION_MAP.tenants,
-                ASSOCIATION_MAP.asset_tags,
-                {
-                    ...ASSOCIATION_MAP.asset_compliance,
-                    where: { compliance_id: complianceId },
-                    required: true,
-                    include: [ASSOCIATION_MAP.asset_compliance.include[0]],
-                },
-                ASSOCIATION_MAP.asset_threats,
-            ],
-            where: { ...filters },
-            order: [],
-            limit: pagination.enabled ? pagination.pageSize : undefined,
-            offset: pagination.enabled ? pagination.skip : undefined,
-        };
+        const { where, joinKeys } = buildFilters(filters, searchFields);
 
-        const sortFields = buildOrderClause(sort);
-        queryOptions.order = sortFields;
-
-        const searchConditions = [];
-        for (const [key, value] of Object.entries(searchFields)) {
-            if (value && value.trim() !== "") {
-                const fieldPath = key.replace("_search", "");
-                searchConditions.push({
-                    [fieldPath]: { [Op.iLike]: `%${value.trim()}%` },
-                });
-            }
+        for (const key of Object.keys(sort)) {
+            const { associationPath } = parseNestedField(key);
+            if (associationPath.length > 0) joinKeys.add(associationPath[0]);
         }
-        if (searchConditions.length > 0) queryOptions.where[Op.and] = searchConditions;
 
-        const { count, rows: assets } = await models.assets.findAndCountAll(queryOptions);
+        joinKeys.add("tenants");
+        joinKeys.add("asset_compliance");
 
-        const total = count;
-        const totalPages = pagination.enabled ? Math.ceil(total / pagination.pageSize) : 1;
-        const currentPage = pagination.enabled ? Math.floor(pagination.skip / pagination.pageSize) + 1 : 1;
+        const include = buildIncludes(joinKeys);
+
+        const complianceInclude = include.find((i) => i.as === "asset_compliance");
+        if (complianceInclude) {
+            complianceInclude.where = { compliance_id: complianceId };
+            complianceInclude.required = true;
+        }
+
+        const order = buildOrderClause(sort);
+
+        const limit = pagination.enabled ? pagination.pageSize : undefined;
+        const offset = pagination.enabled ? pagination.skip : undefined;
+
+        const { count, rows: assets } = await models.assets.findAndCountAll({
+            where,
+            include,
+            order,
+            limit,
+            offset,
+            distinct: true,
+        });
+
+        const totalPages = pagination.enabled ? Math.ceil(count / pagination.pageSize) : 1;
 
         return {
             assets,
             pagination: {
-                total,
-                pageSize: pagination.enabled ? pagination.pageSize : total,
-                currentPage,
+                total: count,
+                currentPage: pagination.enabled ? Math.floor(offset / limit) + 1 : 1,
                 totalPages,
+                pageSize: pagination.enabled ? limit : count,
             },
         };
     };
 
     const getAssetsByThreat = async (threatId, filters = {}, pagination = {}, searchFields = {}, sort = { created_at: "DESC" }) => {
-        const queryOptions = {
-            include: [
-                ASSOCIATION_MAP.tenants,
-                ASSOCIATION_MAP.asset_tags,
-                ASSOCIATION_MAP.asset_compliance,
-                {
-                    ...ASSOCIATION_MAP.asset_threats,
-                    where: { threat_id: threatId },
-                    required: true,
-                    include: [ASSOCIATION_MAP.asset_threats.include[0]],
-                },
-            ],
-            where: { ...filters },
-            order: [],
-            limit: pagination.enabled ? pagination.pageSize : undefined,
-            offset: pagination.enabled ? pagination.skip : undefined,
-        };
+        const { where, joinKeys } = buildFilters(filters, searchFields);
 
-        const sortFields = buildOrderClause(sort);
-        queryOptions.order = sortFields;
-
-        const searchConditions = [];
-        for (const [key, value] of Object.entries(searchFields)) {
-            if (value && value.trim() !== "") {
-                const fieldPath = key.replace("_search", "");
-                searchConditions.push({
-                    [fieldPath]: { [Op.iLike]: `%${value.trim()}%` },
-                });
-            }
+        for (const key of Object.keys(sort)) {
+            const { associationPath } = parseNestedField(key);
+            if (associationPath.length > 0) joinKeys.add(associationPath[0]);
         }
-        if (searchConditions.length > 0) queryOptions.where[Op.and] = searchConditions;
 
-        const { count, rows: assets } = await models.assets.findAndCountAll(queryOptions);
+        joinKeys.add("tenants");
+        joinKeys.add("asset_threats");
 
-        const total = count;
-        const totalPages = pagination.enabled ? Math.ceil(total / pagination.pageSize) : 1;
-        const currentPage = pagination.enabled ? Math.floor(pagination.skip / pagination.pageSize) + 1 : 1;
+        const include = buildIncludes(joinKeys);
+
+        const threatInclude = include.find((i) => i.as === "asset_threats");
+        if (threatInclude) {
+            threatInclude.where = { threat_id: threatId };
+            threatInclude.required = true;
+        }
+
+        const order = buildOrderClause(sort);
+
+        const limit = pagination.enabled ? pagination.pageSize : undefined;
+        const offset = pagination.enabled ? pagination.skip : undefined;
+
+        const { count, rows: assets } = await models.assets.findAndCountAll({
+            where,
+            include,
+            order,
+            limit,
+            offset,
+            distinct: true,
+        });
+
+        const totalPages = pagination.enabled ? Math.ceil(count / pagination.pageSize) : 1;
 
         return {
             assets,
             pagination: {
-                total,
-                pageSize: pagination.enabled ? pagination.pageSize : total,
-                currentPage,
+                total: count,
+                currentPage: pagination.enabled ? Math.floor(offset / limit) + 1 : 1,
                 totalPages,
+                pageSize: pagination.enabled ? limit : count,
             },
         };
     };
 
     const getAssetsCount = async (filters = {}) => {
-        const joinKeys = Object.keys(filters).filter((k) => k.includes("__"));
-        const dynamicIncludes = buildIncludes(joinKeys);
+        const { where, joinKeys } = buildFilters(filters, {});
+        const include = buildIncludes(joinKeys);
+
         return await models.assets.count({
-            where: filters,
-            include: dynamicIncludes.length > 0 ? dynamicIncludes : undefined,
+            where,
+            include: include.length > 0 ? include : undefined,
+            distinct: true,
         });
     };
 
@@ -348,32 +340,43 @@ const assetServices = () => {
                 health_status: "unknown",
             });
 
+            const { where: statsWhere, joinKeys: statsJoinKeys } = buildFilters(filters, {});
+            const statsInclude = buildIncludes(statsJoinKeys);
+
             const providerStats = await models.assets.findAll({
                 attributes: ["provider", [models.sequelize.fn("COUNT", models.sequelize.col("id")), "count"]],
-                where: filters,
+                where: statsWhere,
+                include: statsInclude.length > 0 ? statsInclude : undefined,
                 group: ["provider"],
                 order: [[models.sequelize.col("count"), "DESC"]],
+                distinct: true,
             });
 
             const environmentStats = await models.assets.findAll({
                 attributes: ["environment", [models.sequelize.fn("COUNT", models.sequelize.col("id")), "count"]],
-                where: filters,
+                where: statsWhere,
+                include: statsInclude.length > 0 ? statsInclude : undefined,
                 group: ["environment"],
                 order: [[models.sequelize.col("count"), "DESC"]],
+                distinct: true,
             });
 
             const regionStats = await models.assets.findAll({
                 attributes: ["region", [models.sequelize.fn("COUNT", models.sequelize.col("id")), "count"]],
-                where: filters,
+                where: statsWhere,
+                include: statsInclude.length > 0 ? statsInclude : undefined,
                 group: ["region"],
                 order: [[models.sequelize.col("count"), "DESC"]],
+                distinct: true,
             });
 
             const categoryStats = await models.assets.findAll({
                 attributes: ["category", [models.sequelize.fn("COUNT", models.sequelize.col("id")), "count"]],
-                where: filters,
+                where: statsWhere,
+                include: statsInclude.length > 0 ? statsInclude : undefined,
                 group: ["category"],
                 order: [[models.sequelize.col("count"), "DESC"]],
+                distinct: true,
             });
 
             return {

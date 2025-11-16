@@ -1,4 +1,4 @@
-import _sequelize from "sequelize";
+import _sequelize, { Op } from "sequelize";
 
 const DataTypes = _sequelize.DataTypes;
 import _agents from "./agents.js";
@@ -50,7 +50,6 @@ import _threat_remediation_steps from "./threat_remediation_steps.js";
 import _threats from "./threats.js";
 import _user_roles from "./user_roles.js";
 import _user_sessions from "./user_sessions.js";
-import _user_tenant_roles from "./user_tenant_roles.js";
 import _users from "./users.js";
 import _vsa_database from "./vsa_database.js";
 import _vulnerability_sources from "./vulnerability_sources.js";
@@ -110,7 +109,6 @@ export default function initModels(sequelize) {
     const threats = _threats.init(sequelize, DataTypes);
     const user_roles = _user_roles.init(sequelize, DataTypes);
     const user_sessions = _user_sessions.init(sequelize, DataTypes);
-    const user_tenant_roles = _user_tenant_roles.init(sequelize, DataTypes);
     const users = _users.init(sequelize, DataTypes);
     const vsa_database = _vsa_database.init(sequelize, DataTypes);
     const vulnerability_sources = _vulnerability_sources.init(sequelize, DataTypes);
@@ -239,6 +237,7 @@ export default function initModels(sequelize) {
         through: tenant_users,
         foreignKey: "tenant_id",
         otherKey: "user_id",
+        scope: { role_id: { [Op.col]: "tenant_users.role_id" } },
     });
     threats.belongsToMany(assets, {
         as: "asset_id_assets_asset_threats",
@@ -251,6 +250,7 @@ export default function initModels(sequelize) {
         through: tenant_users,
         foreignKey: "user_id",
         otherKey: "tenant_id",
+        scope: { role_id: { [Op.col]: "tenant_users.role_id" } },
     });
     windows_advisory.belongsToMany(windows_cve, {
         as: "cve_id_windows_cves",
@@ -416,8 +416,6 @@ export default function initModels(sequelize) {
     tenants.hasMany(tenant_users, { as: "tenant_users", foreignKey: "tenant_id" });
     threats.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
     tenants.hasMany(threats, { as: "threats", foreignKey: "tenant_id" });
-    user_tenant_roles.belongsTo(tenants, { as: "tenants", foreignKey: "tenant_id" });
-    tenants.hasMany(user_tenant_roles, { as: "user_tenant_roles", foreignKey: "tenant_id" });
     asset_threats.belongsTo(threats, { as: "threat", foreignKey: "threat_id" });
     threats.hasMany(asset_threats, { as: "asset_threats", foreignKey: "threat_id" });
     threat_related_findings.belongsTo(threats, { as: "threat", foreignKey: "threat_id" });
@@ -430,8 +428,6 @@ export default function initModels(sequelize) {
         as: "threat_remediation_steps",
         foreignKey: "threat_id",
     });
-    user_tenant_roles.belongsTo(user_roles, { as: "role_name_user_role", foreignKey: "role_name" });
-    user_roles.hasMany(user_tenant_roles, { as: "user_tenant_roles", foreignKey: "role_name" });
     audit_logs.belongsTo(users, { as: "user", foreignKey: "user_id" });
     users.hasMany(audit_logs, { as: "audit_logs", foreignKey: "user_id" });
     cloud_connectors.belongsTo(users, { as: "created_by_user", foreignKey: "created_by" });
@@ -464,11 +460,18 @@ export default function initModels(sequelize) {
     system_settings.belongsTo(users, { as: "updated_by_user", foreignKey: "updated_by" });
     users.hasMany(system_settings, { as: "system_settings", foreignKey: "updated_by" });
     tenant_users.belongsTo(users, { as: "user", foreignKey: "user_id" });
+    tenant_users.belongsTo(roles, { as: "role", foreignKey: "role_id" });
+    roles.hasMany(tenant_users, { as: "tenant_users", foreignKey: "role_id" });
     users.hasMany(tenant_users, { as: "tenant_users", foreignKey: "user_id" });
+
+    user_roles.belongsTo(users, { as: "user", foreignKey: "user_id" });
+    users.hasMany(user_roles, { as: "user_roles", foreignKey: "user_id" });
+
+    user_roles.belongsTo(roles, { as: "role", foreignKey: "role_id" });
+    roles.hasMany(user_roles, { as: "user_roles", foreignKey: "role_id" });
+
     user_sessions.belongsTo(users, { as: "user", foreignKey: "user_id" });
     users.hasMany(user_sessions, { as: "user_sessions", foreignKey: "user_id" });
-    user_tenant_roles.belongsTo(users, { as: "user", foreignKey: "user_id" });
-    users.hasMany(user_tenant_roles, { as: "user_tenant_roles", foreignKey: "user_id" });
     cve_update_marker.belongsTo(vulnerability_sources, { as: "source", foreignKey: "source_id" });
     vulnerability_sources.hasOne(cve_update_marker, {
         as: "cve_update_marker",
@@ -554,7 +557,6 @@ export default function initModels(sequelize) {
         threats,
         user_roles,
         user_sessions,
-        user_tenant_roles,
         users,
         vsa_database,
         vulnerability_sources,

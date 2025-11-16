@@ -18,6 +18,22 @@ export const loginController = async (req, res) => {
         const user = await models.users.findOne({
             where: { email },
             attributes: { include: ["password_hash"] },
+            include: [
+                {
+                    model: models.user_roles,
+                    as: "user_roles",
+                    attributes: [],
+                    required: false,
+                    include: [
+                        {
+                            model: models.roles,
+                            as: "role",
+                            attributes: ["id", "name"],
+                            required: false,
+                        },
+                    ],
+                },
+            ],
         });
 
         if (!user) {
@@ -73,6 +89,17 @@ export const loginController = async (req, res) => {
 
         res.setHeader("Cache-Control", "no-store");
 
+        // Extract roles from the user's user_roles association
+        const userRoles = user.user_roles
+            ? user.user_roles.map((ur) => ({
+                  id: ur.role.id,
+                  name: ur.role.name,
+              }))
+            : [];
+
+        // Remove the user_roles array from the user object as it's not needed in the response
+        delete user.user_roles;
+
         return res.status(200).json({
             message: "Login successful",
             expiresIn: "1h",
@@ -80,6 +107,7 @@ export const loginController = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 name: user.name_first + " " + user.name_last,
+                roles: userRoles,
                 preferences: {
                     theme: user.preference_theme,
                     notifications: user.preference_notifications,
@@ -113,6 +141,22 @@ export const refreshAccessTokenController = async (req, res) => {
 
         const user = await models.users.findOne({
             where: { id: decoded.id },
+            include: [
+                {
+                    model: models.user_roles,
+                    as: "user_roles",
+                    attributes: [],
+                    required: false,
+                    include: [
+                        {
+                            model: models.roles,
+                            as: "role",
+                            attributes: ["id", "name"],
+                            required: false,
+                        },
+                    ],
+                },
+            ],
         });
 
         if (!user) {
@@ -140,6 +184,17 @@ export const refreshAccessTokenController = async (req, res) => {
             path: "/",
         });
 
+        // Extract roles from the user's user_roles association
+        const userRoles = user.user_roles
+            ? user.user_roles.map((ur) => ({
+                  id: ur.role.id,
+                  name: ur.role.name,
+              }))
+            : [];
+
+        // Remove the user_roles array from the user object as it's not needed in the response
+        delete user.user_roles;
+
         return res.status(200).json({
             message: "Access token refreshed successfully",
             expiresIn: "1h",
@@ -147,6 +202,7 @@ export const refreshAccessTokenController = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 name: user.name_first + " " + user.name_last,
+                roles: userRoles,
                 preferences: {
                     theme: user.preference_theme,
                     notifications: user.preference_notifications,

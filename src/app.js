@@ -7,6 +7,8 @@ import "dotenv/config";
 import authRoutes from "./routes/authRoutes.js";
 import samlRoutes from "./routes/samlRoutes.js";
 import assetRoutes from "./routes/assetRoutes.js";
+import tenantRoutes from "./routes/tenantRoutes.js";
+import { swaggerDocs } from "./swagger.js";
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/saml", samlRoutes);
 app.use("/api", assetRoutes);
+app.use("/api", tenantRoutes);
+swaggerDocs(app);
 
 app.use((req, res) => {
     console.warn("Route not found:", req.originalUrl);

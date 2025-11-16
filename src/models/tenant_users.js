@@ -24,6 +24,15 @@ export default class tenant_users extends Model {
                         key: "id",
                     },
                 },
+                role_id: {
+                    type: DataTypes.TEXT,
+                    allowNull: false,
+                    primaryKey: true,
+                    reference: {
+                        model: "roles",
+                        key: "id",
+                    },
+                },
                 status: {
                     type: DataTypes.TEXT,
                     allowNull: false,

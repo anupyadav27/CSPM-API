@@ -6,10 +6,29 @@ export default class user_roles extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
-                name: {
+                user_id: {
                     type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
+                    references: {
+                        model: {
+                            tableName: "users",
+                            schema: "cspm",
+                        },
+                        key: "id",
+                    },
+                },
+                role_id: {
+                    type: DataTypes.TEXT,
+                    allowNull: false,
+                    primaryKey: true,
+                    references: {
+                        model: {
+                            tableName: "roles",
+                            schema: "cspm",
+                        },
+                        key: "id",
+                    },
                 },
             },
             {
@@ -22,7 +41,7 @@ export default class user_roles extends Model {
                     {
                         name: "user_roles_pkey",
                         unique: true,
-                        fields: [{ name: "name" }],
+                        fields: [{ name: "user_id" }, { name: "role_id" }],
                     },
                 ],
             }
