@@ -7,28 +7,30 @@ export default class scans extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 agent_id: {
-                    type: DataTypes.STRING(255),
+                    type: DataTypes.TEXT,
                     allowNull: false,
+                    references: {
+                        model: "agents",
+                        key: "agent_id",
+                    },
                 },
                 scan_start: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 scan_end: {
                     type: DataTypes.DATE,
                     allowNull: true,
                 },
                 status: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "running",
+                    defaultValue: "pending",
                 },
                 packages_scanned: {
                     type: DataTypes.INTEGER,
@@ -41,23 +43,13 @@ export default class scans extends Model {
                     defaultValue: 0,
                 },
                 scan_duration: {
-                    type: DataTypes.DOUBLE,
+                    type: DataTypes.INTEGER,
                     allowNull: true,
-                },
-                system_info: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                    defaultValue: {},
                 },
                 analysis_mode: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "central",
-                },
-                created_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                    defaultValue: "full",
                 },
                 tenant_id: {
                     type: DataTypes.TEXT,
@@ -67,6 +59,16 @@ export default class scans extends Model {
                         key: "id",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -74,7 +76,12 @@ export default class scans extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
+                    {
+                        name: "idx_scans_agent_id",
+                        fields: [{ name: "agent_id" }],
+                    },
                     {
                         name: "idx_scans_tenant_id",
                         fields: [{ name: "tenant_id" }],

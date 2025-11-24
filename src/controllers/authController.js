@@ -22,7 +22,7 @@ export const loginController = async (req, res) => {
                 {
                     model: models.user_roles,
                     as: "user_roles",
-                    attributes: [],
+                    attributes: ["role_id"],
                     required: false,
                     include: [
                         {
@@ -89,16 +89,12 @@ export const loginController = async (req, res) => {
 
         res.setHeader("Cache-Control", "no-store");
 
-        // Extract roles from the user's user_roles association
         const userRoles = user.user_roles
             ? user.user_roles.map((ur) => ({
                   id: ur.role.id,
                   name: ur.role.name,
               }))
             : [];
-
-        // Remove the user_roles array from the user object as it's not needed in the response
-        delete user.user_roles;
 
         return res.status(200).json({
             message: "Login successful",
@@ -108,11 +104,6 @@ export const loginController = async (req, res) => {
                 email: user.email,
                 name: user.name_first + " " + user.name_last,
                 roles: userRoles,
-                preferences: {
-                    theme: user.preference_theme,
-                    notifications: user.preference_notifications,
-                    language: user.preference_language,
-                },
             },
         });
     } catch (error) {
@@ -145,7 +136,7 @@ export const refreshAccessTokenController = async (req, res) => {
                 {
                     model: models.user_roles,
                     as: "user_roles",
-                    attributes: [],
+                    attributes: ["role_id"],
                     required: false,
                     include: [
                         {
@@ -184,7 +175,6 @@ export const refreshAccessTokenController = async (req, res) => {
             path: "/",
         });
 
-        // Extract roles from the user's user_roles association
         const userRoles = user.user_roles
             ? user.user_roles.map((ur) => ({
                   id: ur.role.id,
@@ -192,7 +182,6 @@ export const refreshAccessTokenController = async (req, res) => {
               }))
             : [];
 
-        // Remove the user_roles array from the user object as it's not needed in the response
         delete user.user_roles;
 
         return res.status(200).json({
@@ -203,11 +192,6 @@ export const refreshAccessTokenController = async (req, res) => {
                 email: user.email,
                 name: user.name_first + " " + user.name_last,
                 roles: userRoles,
-                preferences: {
-                    theme: user.preference_theme,
-                    notifications: user.preference_notifications,
-                    language: user.preference_language,
-                },
             },
         });
     } catch (error) {

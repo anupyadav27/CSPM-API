@@ -1,6 +1,6 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class windows_product extends Model {
     static init(sequelize, DataTypes) {
@@ -15,6 +15,16 @@ export default class windows_product extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -22,6 +32,7 @@ export default class windows_product extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "windows_product_pkey",

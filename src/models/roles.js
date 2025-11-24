@@ -43,12 +43,12 @@ export default class roles extends Model {
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -57,12 +57,8 @@ export default class roles extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_roles_name_tenant_scoped",
-                        unique: true,
-                        fields: [{ name: "name" }, { name: "tenant_scoped" }],
-                    },
                     {
                         name: "roles_pkey",
                         unique: true,

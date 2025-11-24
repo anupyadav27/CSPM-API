@@ -6,6 +6,11 @@ export default class notification_rules extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
+                id: {
+                    type: DataTypes.TEXT,
+                    allowNull: false,
+                    primaryKey: true,
+                },
                 settings_id: {
                     type: DataTypes.TEXT,
                     allowNull: false,
@@ -34,7 +39,12 @@ export default class notification_rules extends Model {
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -43,6 +53,14 @@ export default class notification_rules extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
+                indexes: [
+                    {
+                        name: "notification_rules_pkey",
+                        unique: true,
+                        fields: [{ name: "id" }],
+                    },
+                ],
             }
         );
     }

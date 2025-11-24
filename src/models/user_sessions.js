@@ -38,7 +38,7 @@ export default class user_sessions extends Model {
                 },
                 login_method: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: "local",
                 },
                 expires_at: {
@@ -65,12 +65,12 @@ export default class user_sessions extends Model {
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 session_index: {
                     type: DataTypes.TEXT,
@@ -83,6 +83,7 @@ export default class user_sessions extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "idx_user_sessions_expires_at",

@@ -29,46 +29,21 @@ export default class policies extends Model {
                 },
                 category: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "Custom",
-                },
-                type: {
-                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "json",
-                },
-                document: {
-                    type: DataTypes.TEXT,
-                    allowNull: false,
-                },
-                version: {
-                    type: DataTypes.INTEGER,
-                    allowNull: true,
-                    defaultValue: 1,
                 },
                 validation_status: {
                     type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "unknown",
+                    defaultValue: "pending",
                 },
                 compliance_status: {
                     type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "unknown",
-                },
-                enforced_by: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    defaultValue: "Manual",
-                },
-                enforcement_status: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    defaultValue: "not_enforced",
+                    defaultValue: "non_compliant",
                 },
                 created_by: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
+                    allowNull: true,
                     references: {
                         model: "users",
                         key: "id",
@@ -82,20 +57,15 @@ export default class policies extends Model {
                         key: "id",
                     },
                 },
-                last_evaluated_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
-                },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -104,14 +74,11 @@ export default class policies extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
-                        name: "idx_policies_compliance_enforcement",
-                        fields: [{ name: "compliance_status" }, { name: "enforcement_status" }],
-                    },
-                    {
-                        name: "idx_policies_tenant_category_name",
-                        fields: [{ name: "tenant_id" }, { name: "category" }, { name: "name" }],
+                        name: "idx_policies_tenant_id",
+                        fields: [{ name: "tenant_id" }],
                     },
                     {
                         name: "policies_pkey",

@@ -55,3 +55,4 @@ Thumbs.db
 
 /src/seeders/
 /core/
+/full_backup.sql

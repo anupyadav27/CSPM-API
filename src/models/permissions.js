@@ -47,12 +47,12 @@ export default class permissions extends Model {
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -61,12 +61,8 @@ export default class permissions extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_permissions_feature_action",
-                        unique: true,
-                        fields: [{ name: "feature" }, { name: "action" }],
-                    },
                     {
                         name: "permissions_pkey",
                         unique: true,

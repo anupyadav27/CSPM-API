@@ -7,13 +7,12 @@ export default class quality_metrics extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 pipeline_run_id: {
-                    type: DataTypes.UUID,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "pipeline_executions",
@@ -21,7 +20,7 @@ export default class quality_metrics extends Model {
                     },
                 },
                 source_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "vulnerability_sources",
@@ -73,28 +72,12 @@ export default class quality_metrics extends Model {
                     allowNull: true,
                     defaultValue: 0,
                 },
-                schema_violations: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
-                business_rule_violations: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
-                data_anomalies: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
-                compared_with_sources: {
-                    type: DataTypes.ARRAY(DataTypes.INTEGER),
-                    allowNull: true,
-                },
-                consistency_conflicts: {
-                    type: DataTypes.INTEGER,
-                    allowNull: true,
-                    defaultValue: 0,
-                },
                 created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
                     defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
@@ -106,6 +89,7 @@ export default class quality_metrics extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "quality_metrics_pkey",

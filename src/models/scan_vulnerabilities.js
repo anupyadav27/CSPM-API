@@ -7,13 +7,12 @@ export default class scan_vulnerabilities extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 scan_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     references: {
                         model: "scans",
@@ -21,19 +20,23 @@ export default class scan_vulnerabilities extends Model {
                     },
                 },
                 cve_id: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: false,
+                    references: {
+                        model: "cves",
+                        key: "cve_id",
+                    },
                 },
                 package_name: {
-                    type: DataTypes.STRING(255),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 package_version: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 severity: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 score: {
@@ -41,7 +44,7 @@ export default class scan_vulnerabilities extends Model {
                     allowNull: true,
                 },
                 vector: {
-                    type: DataTypes.STRING(200),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 description: {
@@ -51,20 +54,18 @@ export default class scan_vulnerabilities extends Model {
                 discovered_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 source: {
-                    type: DataTypes.STRING(50),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "engine",
                 },
                 agent_id: {
-                    type: DataTypes.STRING(255),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                },
-                system_info: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
+                    references: {
+                        model: "agents",
+                        key: "agent_id",
+                    },
                 },
                 tenant_id: {
                     type: DataTypes.TEXT,
@@ -74,6 +75,16 @@ export default class scan_vulnerabilities extends Model {
                         key: "id",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -81,9 +92,18 @@ export default class scan_vulnerabilities extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
-                        name: "idx_scan_vulns_tenant_id",
+                        name: "idx_scan_vulnerabilities_cve_id",
+                        fields: [{ name: "cve_id" }],
+                    },
+                    {
+                        name: "idx_scan_vulnerabilities_scan_id",
+                        fields: [{ name: "scan_id" }],
+                    },
+                    {
+                        name: "idx_scan_vulnerabilities_tenant_id",
                         fields: [{ name: "tenant_id" }],
                     },
                     {

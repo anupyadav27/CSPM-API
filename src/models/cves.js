@@ -12,7 +12,7 @@ export default class cves extends Model {
                     primaryKey: true,
                 },
                 source_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "vulnerability_sources",
@@ -60,18 +60,16 @@ export default class cves extends Model {
                     allowNull: true,
                 },
                 discovered_by_source: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 source_priority: {
                     type: DataTypes.INTEGER,
                     allowNull: true,
-                    defaultValue: 5,
                 },
                 cross_source_verified: {
                     type: DataTypes.BOOLEAN,
                     allowNull: true,
-                    defaultValue: false,
                 },
                 mitigation: {
                     type: DataTypes.TEXT,
@@ -92,30 +90,14 @@ export default class cves extends Model {
                 sequelize,
                 tableName: "cves",
                 schema: "cspm",
-                hasTrigger: true,
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "cves_pkey",
                         unique: true,
                         fields: [{ name: "cve_id" }],
-                    },
-                    {
-                        name: "idx_cves_cvss_v3_score",
-                        fields: [{ name: "cvss_v3_score" }],
-                    },
-                    {
-                        name: "idx_cves_published_date",
-                        fields: [{ name: "published_date" }],
-                    },
-                    {
-                        name: "idx_cves_severity",
-                        fields: [{ name: "severity" }],
-                    },
-                    {
-                        name: "idx_cves_source_id",
-                        fields: [{ name: "source_id" }],
                     },
                 ],
             }

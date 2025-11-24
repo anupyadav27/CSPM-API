@@ -26,43 +26,22 @@ export default class tenant_users extends Model {
                 },
                 role_id: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    primaryKey: true,
-                    reference: {
-                        model: "roles",
-                        key: "id",
-                    },
+                    allowNull: true,
                 },
                 status: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: "active",
-                },
-                last_accessed_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
-                invited_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
-                joined_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
-                removed_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -71,11 +50,8 @@ export default class tenant_users extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_tenant_users_status",
-                        fields: [{ name: "status" }],
-                    },
                     {
                         name: "tenant_users_pkey",
                         unique: true,

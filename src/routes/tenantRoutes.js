@@ -6,7 +6,7 @@ import { authenticateUser } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/tenants", authenticateUser, paginate(), getAllTenantsController);
+router.get("/tenants", paginate(), getAllTenantsController);
 router.get("/tenants/export", exportTenantsController);
 
 export default router;

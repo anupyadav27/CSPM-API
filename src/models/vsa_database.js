@@ -7,19 +7,46 @@ export default class vsa_database extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 advisory_id: {
-                    type: DataTypes.STRING(50),
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     unique: "vsa_database_advisory_id_key",
                 },
-                vendor: {
-                    type: DataTypes.STRING(100),
-                    allowNull: false,
+                advisory_title: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
+                },
+                advisory_url: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
+                },
+                cve_list: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
+                },
+                affected_products: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
+                },
+                severity: {
+                    type: DataTypes.TEXT,
+                    allowNull: true,
+                },
+                cvss_score: {
+                    type: DataTypes.DECIMAL,
+                    allowNull: true,
+                },
+                published_date: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                },
+                updated_date: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
                 },
                 title: {
                     type: DataTypes.TEXT,
@@ -29,28 +56,28 @@ export default class vsa_database extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                published_date: {
+                published_date_advisory: {
                     type: DataTypes.DATE,
                     allowNull: true,
                 },
-                severity: {
-                    type: DataTypes.STRING(20),
+                severity_advisory: {
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 affected_packages: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                cve_list: {
+                cve_list_advisory: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                references: {
+                references_advisory: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                status: {
-                    type: DataTypes.STRING(20),
+                status_advisory: {
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     defaultValue: "active",
                 },
@@ -73,9 +100,9 @@ export default class vsa_database extends Model {
                 sequelize,
                 tableName: "vsa_database",
                 schema: "cspm",
-                hasTrigger: true,
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "vsa_database_advisory_id_key",

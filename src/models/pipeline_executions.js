@@ -7,39 +7,37 @@ export default class pipeline_executions extends Model {
         return super.init(
             {
                 run_id: {
-                    type: DataTypes.UUID,
+                    type: DataTypes.TEXT,
                     allowNull: false,
-                    defaultValue: Sequelize.Sequelize.fn("cspm.uuid_generate_v4"),
                     primaryKey: true,
                 },
                 pipeline_type: {
-                    type: DataTypes.STRING(50),
+                    type: DataTypes.TEXT,
                     allowNull: false,
                 },
                 execution_status: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "running",
+                    defaultValue: "pending",
                 },
                 started_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 completed_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
                 },
                 triggered_by: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 environment: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 source_filters: {
-                    type: DataTypes.ARRAY(DataTypes.TEXT),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 total_sources: {
@@ -67,9 +65,8 @@ export default class pipeline_executions extends Model {
                     allowNull: true,
                 },
                 validation_errors: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: 0,
                 },
                 duplicate_count: {
                     type: DataTypes.INTEGER,
@@ -77,11 +74,11 @@ export default class pipeline_executions extends Model {
                     defaultValue: 0,
                 },
                 execution_time_seconds: {
-                    type: DataTypes.DECIMAL,
+                    type: DataTypes.INTEGER,
                     allowNull: true,
                 },
                 memory_usage_mb: {
-                    type: DataTypes.DECIMAL,
+                    type: DataTypes.INTEGER,
                     allowNull: true,
                 },
                 cpu_usage_percent: {
@@ -92,23 +89,28 @@ export default class pipeline_executions extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                error_details: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
                 retry_count: {
                     type: DataTypes.INTEGER,
                     allowNull: true,
                     defaultValue: 0,
                 },
                 created_by: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: "system",
+                    references: {
+                        model: "users",
+                        key: "id",
+                    },
                 },
-                configuration_snapshot: {
-                    type: DataTypes.JSONB,
+                created_at: {
+                    type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -117,15 +119,8 @@ export default class pipeline_executions extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_pipeline_executions_started_at",
-                        fields: [{ name: "started_at" }],
-                    },
-                    {
-                        name: "idx_pipeline_executions_status",
-                        fields: [{ name: "execution_status" }],
-                    },
                     {
                         name: "pipeline_executions_pkey",
                         unique: true,

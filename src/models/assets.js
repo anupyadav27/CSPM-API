@@ -33,8 +33,7 @@ export default class assets extends Model {
                 },
                 provider: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "aws",
+                    allowNull: true,
                 },
                 region: {
                     type: DataTypes.TEXT,
@@ -42,40 +41,35 @@ export default class assets extends Model {
                 },
                 environment: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "production",
+                    allowNull: true,
                 },
                 category: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                created_at_cloud: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
                 lifecycle_state: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "active",
-                },
-                last_scanned_at: {
-                    type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: "active",
                 },
                 health_status: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "unknown",
+                    allowNull: true,
+                    defaultValue: "healthy",
+                },
+                metadata: {
+                    type: DataTypes.JSONB,
+                    allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -84,6 +78,7 @@ export default class assets extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "assets_pkey",
@@ -97,6 +92,10 @@ export default class assets extends Model {
                     {
                         name: "idx_assets_region_env",
                         fields: [{ name: "region" }, { name: "environment" }],
+                    },
+                    {
+                        name: "idx_assets_tenant_id",
+                        fields: [{ name: "tenant_id" }],
                     },
                     {
                         name: "idx_assets_tenant_resource",

@@ -59,42 +59,23 @@ export default class audit_logs extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                endpoint: {
+                params: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                before_state: {
-                    type: DataTypes.TEXT,
+                response_status: {
+                    type: DataTypes.INTEGER,
                     allowNull: true,
-                },
-                after_state: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
-                severity: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    defaultValue: "info",
-                },
-                source: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    defaultValue: "user",
-                },
-                log_timestamp: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
                 },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -103,23 +84,12 @@ export default class audit_logs extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "audit_logs_pkey",
                         unique: true,
                         fields: [{ name: "id" }],
-                    },
-                    {
-                        name: "idx_audit_logs_entity",
-                        fields: [{ name: "entity_type" }, { name: "entity_id" }],
-                    },
-                    {
-                        name: "idx_audit_logs_tenant_action",
-                        fields: [{ name: "tenant_id" }, { name: "action" }],
-                    },
-                    {
-                        name: "idx_audit_logs_timestamp",
-                        fields: [{ name: "log_timestamp", order: "DESC" }],
                     },
                 ],
             }

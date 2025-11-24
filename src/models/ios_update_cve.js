@@ -1,13 +1,13 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class ios_update_cve extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
                 update_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                     references: {
@@ -24,6 +24,16 @@ export default class ios_update_cve extends Model {
                         key: "cve_id",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -31,6 +41,7 @@ export default class ios_update_cve extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "ios_update_cve_pkey",

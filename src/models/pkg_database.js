@@ -7,25 +7,21 @@ export default class pkg_database extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 pkg_name: {
                     type: DataTypes.STRING(200),
                     allowNull: false,
-                    unique: "pkg_database_unique_pkg_vendor_version",
                 },
                 vendor: {
                     type: DataTypes.STRING(100),
                     allowNull: false,
-                    unique: "pkg_database_unique_pkg_vendor_version",
                 },
                 version: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
-                    unique: "pkg_database_unique_pkg_vendor_version",
                 },
                 architecture: {
                     type: DataTypes.STRING(50),
@@ -47,7 +43,6 @@ export default class pkg_database extends Model {
                 release: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
-                    unique: "pkg_database_unique",
                 },
                 dependencies: {
                     type: DataTypes.TEXT,
@@ -65,16 +60,6 @@ export default class pkg_database extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                created_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
-                },
-                updated_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
-                },
                 fixed_version: {
                     type: DataTypes.TEXT,
                     allowNull: true,
@@ -87,6 +72,16 @@ export default class pkg_database extends Model {
                         key: "id",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -94,6 +89,7 @@ export default class pkg_database extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "idx_pkg_database_tenant_id",
@@ -103,16 +99,6 @@ export default class pkg_database extends Model {
                         name: "pkg_database_pkey",
                         unique: true,
                         fields: [{ name: "id" }],
-                    },
-                    {
-                        name: "pkg_database_unique",
-                        unique: true,
-                        fields: [{ name: "pkg_name" }, { name: "vendor" }, { name: "version" }, { name: "release" }],
-                    },
-                    {
-                        name: "pkg_database_unique_pkg_vendor_version",
-                        unique: true,
-                        fields: [{ name: "pkg_name" }, { name: "vendor" }, { name: "version" }],
                     },
                 ],
             }

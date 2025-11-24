@@ -10,6 +10,10 @@ export default class windows_cve extends Model {
                     type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
+                    references: {
+                        model: "cves",
+                        key: "cve_id",
+                    },
                 },
                 cve_title: {
                     type: DataTypes.TEXT,
@@ -56,6 +60,7 @@ export default class windows_cve extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "windows_cve_pkey",

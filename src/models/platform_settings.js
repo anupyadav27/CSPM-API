@@ -35,12 +35,12 @@ export default class platform_settings extends Model {
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -49,14 +49,11 @@ export default class platform_settings extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "idx_platform_settings_key",
                         fields: [{ name: "key" }],
-                    },
-                    {
-                        name: "idx_platform_settings_updated_at",
-                        fields: [{ name: "updated_at", order: "DESC" }],
                     },
                     {
                         name: "platform_settings_key_key",

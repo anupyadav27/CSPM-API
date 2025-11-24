@@ -7,8 +7,7 @@ export default class windows_advisory extends Model {
         return super.init(
             {
                 advisory_id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
@@ -54,6 +53,7 @@ export default class windows_advisory extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "windows_advisory_advisory_tracking_id_key",

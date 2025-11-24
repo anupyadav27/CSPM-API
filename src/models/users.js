@@ -38,37 +38,22 @@ export default class users extends Model {
                 },
                 status: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: "active",
                 },
                 last_login: {
                     type: DataTypes.DATE,
                     allowNull: true,
                 },
-                preference_theme: {
-                    type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "light",
-                },
-                preference_notifications: {
-                    type: DataTypes.BOOLEAN,
-                    allowNull: false,
-                    defaultValue: true,
-                },
-                preference_language: {
-                    type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "en",
-                },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -77,11 +62,8 @@ export default class users extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_users_status",
-                        fields: [{ name: "status" }],
-                    },
                     {
                         name: "users_email_key",
                         unique: true,

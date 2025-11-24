@@ -6,18 +6,22 @@ export default class cve_update_marker extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
-                source_id: {
-                    type: DataTypes.INTEGER,
+                id: {
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
+                },
+                source_id: {
+                    type: DataTypes.TEXT,
+                    allowNull: false,
                     references: {
                         model: "vulnerability_sources",
                         key: "id",
                     },
                 },
                 latest_cve_id: {
-                    type: DataTypes.STRING(20),
-                    allowNull: false,
+                    type: DataTypes.TEXT,
+                    allowNull: true,
                 },
                 updated_at: {
                     type: DataTypes.DATE,
@@ -32,6 +36,11 @@ export default class cve_update_marker extends Model {
                         key: "id",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -39,11 +48,12 @@ export default class cve_update_marker extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "cve_update_marker_pkey",
                         unique: true,
-                        fields: [{ name: "source_id" }],
+                        fields: [{ name: "id" }],
                     },
                     {
                         name: "idx_cve_update_marker_tenant_id",

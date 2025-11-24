@@ -102,6 +102,8 @@ const tenantServices = () => {
                 distinct: true,
             });
 
+            console.log(tenants);
+
             const formattedTenants = tenants.map((tenant) => {
                 const tenantData = tenant.toJSON();
                 const userTenantEntry = tenantData.tenant_users?.find((tu) => tu.user_id === userId);

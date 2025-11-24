@@ -1,6 +1,6 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class role_permissions extends Model {
     static init(sequelize, DataTypes) {
@@ -24,6 +24,16 @@ export default class role_permissions extends Model {
                         key: "key",
                     },
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -31,6 +41,7 @@ export default class role_permissions extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "role_permissions_pkey",

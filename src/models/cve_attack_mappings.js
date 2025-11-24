@@ -7,39 +7,41 @@ export default class cve_attack_mappings extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 cve_id: {
-                    type: DataTypes.STRING(20),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "cves",
                         key: "cve_id",
                     },
-                    unique: "cve_attack_mappings_cve_id_technique_id_key",
                 },
                 technique_id: {
-                    type: DataTypes.STRING(10),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "mitre_techniques",
                         key: "technique_id",
                     },
-                    unique: "cve_attack_mappings_cve_id_technique_id_key",
                 },
                 confidence_level: {
-                    type: DataTypes.STRING(10),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     defaultValue: "medium",
                 },
                 mapping_source: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
                     defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
@@ -51,12 +53,8 @@ export default class cve_attack_mappings extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "cve_attack_mappings_cve_id_technique_id_key",
-                        unique: true,
-                        fields: [{ name: "cve_id" }, { name: "technique_id" }],
-                    },
                     {
                         name: "cve_attack_mappings_pkey",
                         unique: true,

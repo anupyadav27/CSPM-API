@@ -7,13 +7,12 @@ export default class source_fetch_audit extends Model {
         return super.init(
             {
                 id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
                 source_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "vulnerability_sources",
@@ -21,7 +20,7 @@ export default class source_fetch_audit extends Model {
                     },
                 },
                 pipeline_run_id: {
-                    type: DataTypes.UUID,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "pipeline_executions",
@@ -76,14 +75,12 @@ export default class source_fetch_audit extends Model {
                     allowNull: true,
                 },
                 parsing_errors: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: 0,
                 },
                 validation_errors: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
-                    defaultValue: 0,
                 },
                 fetch_duration_seconds: {
                     type: DataTypes.DECIMAL,
@@ -115,61 +112,30 @@ export default class source_fetch_audit extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
-                error_details: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
                 retry_attempts: {
                     type: DataTypes.INTEGER,
                     allowNull: true,
                     defaultValue: 0,
                 },
-                source_response_metadata: {
-                    type: DataTypes.JSONB,
-                    allowNull: true,
-                },
-                last_modified_header: {
+                created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
-                etag_value: {
-                    type: DataTypes.STRING(100),
-                    allowNull: true,
-                },
-                incremental_marker: {
-                    type: DataTypes.STRING(200),
-                    allowNull: true,
-                },
-                incremental_timestamp: {
+                updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                },
-                full_sync_required: {
-                    type: DataTypes.BOOLEAN,
-                    allowNull: true,
-                    defaultValue: false,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
                 sequelize,
                 tableName: "source_fetch_audit",
                 schema: "cspm",
-                hasTrigger: true,
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
-                    {
-                        name: "idx_fetch_audit_fetch_started",
-                        fields: [{ name: "fetch_started" }],
-                    },
-                    {
-                        name: "idx_fetch_audit_source_id",
-                        fields: [{ name: "source_id" }],
-                    },
-                    {
-                        name: "idx_fetch_audit_status",
-                        fields: [{ name: "status" }],
-                    },
                     {
                         name: "source_fetch_audit_pkey",
                         unique: true,

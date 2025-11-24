@@ -1,14 +1,13 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class ios_advisory extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
                 advisory_id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
@@ -33,6 +32,16 @@ export default class ios_advisory extends Model {
                     type: DataTypes.TEXT,
                     allowNull: true,
                 },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             },
             {
                 sequelize,
@@ -40,6 +49,7 @@ export default class ios_advisory extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "ios_advisory_advisory_url_key",

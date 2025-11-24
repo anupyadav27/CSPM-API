@@ -19,9 +19,6 @@ export const getAllTenantsController = async (req, res) => {
         const userId = req?.userId;
         const userRoles = req?.user?.roles;
         const hasDeveloperRole = false;
-        // if (userRoles) {
-        //     hasDeveloperRole = userRoles.some((role) => role.name === "developer");
-        // }
 
         const filters = {};
 

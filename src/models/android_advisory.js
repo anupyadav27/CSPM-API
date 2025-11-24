@@ -7,8 +7,7 @@ export default class android_advisory extends Model {
         return super.init(
             {
                 advisory_id: {
-                    autoIncrement: true,
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
                 },
@@ -42,6 +41,7 @@ export default class android_advisory extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "android_advisory_bulletin_url_key",

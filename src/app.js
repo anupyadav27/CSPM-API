@@ -9,6 +9,11 @@ import samlRoutes from "./routes/samlRoutes.js";
 import assetRoutes from "./routes/assetRoutes.js";
 import tenantRoutes from "./routes/tenantRoutes.js";
 import { swaggerDocs } from "./swagger.js";
+import vulnerabilityRoutes from "./routes/vulnerabilityRoutes.js";
+import threatRoutes from "./routes/threatRoutes.js";
+import complianceRoutes from "./routes/complianceRoutes.js";
+import policyRoutes from "./routes/policyRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 const app = express();
 
@@ -30,6 +35,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth/saml", samlRoutes);
 app.use("/api", assetRoutes);
 app.use("/api", tenantRoutes);
+app.use("/api", vulnerabilityRoutes);
+app.use("/api", threatRoutes);
+app.use("/api", complianceRoutes);
+app.use("/api", policyRoutes);
+app.use("/api", reportRoutes);
 swaggerDocs(app);
 
 app.use((req, res) => {

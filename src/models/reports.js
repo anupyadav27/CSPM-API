@@ -31,80 +31,32 @@ export default class reports extends Model {
                     type: DataTypes.TEXT,
                     allowNull: false,
                 },
-                format: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                    defaultValue: "pdf",
-                },
-                generated_by: {
-                    type: DataTypes.TEXT,
-                    allowNull: false,
-                    references: {
-                        model: "users",
-                        key: "id",
-                    },
-                },
-                generated_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
-                },
-                scheduled: {
-                    type: DataTypes.BOOLEAN,
-                    allowNull: true,
-                    defaultValue: false,
-                },
-                schedule_cron: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
-                schedule_next_run_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
-                schedule_recipients: {
-                    type: DataTypes.ARRAY(DataTypes.TEXT),
-                    allowNull: true,
-                },
-                data_summary: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
-                file_url: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
-                export_metadata: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
                 status: {
                     type: DataTypes.TEXT,
                     allowNull: true,
                     defaultValue: "pending",
                 },
-                error_message: {
-                    type: DataTypes.TEXT,
+                generated_at: {
+                    type: DataTypes.DATE,
                     allowNull: true,
                 },
-                triggered_by_automation: {
-                    type: DataTypes.BOOLEAN,
-                    allowNull: true,
-                    defaultValue: false,
-                },
-                automation_ref: {
+                generated_by: {
                     type: DataTypes.TEXT,
                     allowNull: true,
+                    references: {
+                        model: "users",
+                        key: "id",
+                    },
                 },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -113,14 +65,11 @@ export default class reports extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
-                        name: "idx_reports_status",
-                        fields: [{ name: "status" }],
-                    },
-                    {
-                        name: "idx_reports_tenant_type_generated",
-                        fields: [{ name: "tenant_id" }, { name: "type" }, { name: "generated_at", order: "DESC" }],
+                        name: "idx_reports_tenant_id",
+                        fields: [{ name: "tenant_id" }],
                     },
                     {
                         name: "reports_pkey",

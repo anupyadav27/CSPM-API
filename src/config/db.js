@@ -9,7 +9,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "postgres",
-    schema: process.env.DB_SCHEMA,
     logging: process.env.DB_LOGGING === "true",
     pool: {
         max: 10,
@@ -17,6 +16,19 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
         acquire: 30000,
         idle: 10000,
     },
+});
+
+sequelize.beforeConnect((config) => {
+    config.dialectOptions = {
+        ...config.dialectOptions,
+        context: {},
+    };
+});
+
+sequelize.addHook("afterConnect", async (connection) => {
+    const schema = "cspm";
+
+    await connection.query(`SET search_path TO ${schema};`);
 });
 
 const models = initModels(sequelize);

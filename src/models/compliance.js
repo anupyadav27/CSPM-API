@@ -31,46 +31,28 @@ export default class compliance extends Model {
                     type: DataTypes.TEXT,
                     allowNull: false,
                 },
-                description: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
                 status: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "unknown",
+                    allowNull: true,
+                    defaultValue: "pending",
                 },
                 severity: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
-                    defaultValue: "low",
+                    allowNull: true,
                 },
                 last_checked_at: {
                     type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
-                },
-                remediated_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                },
-                automation_id: {
-                    type: DataTypes.TEXT,
-                    allowNull: true,
-                },
-                notes: {
-                    type: DataTypes.TEXT,
                     allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
-                    defaultValue: Sequelize.Sequelize.fn("now"),
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -79,6 +61,7 @@ export default class compliance extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "compliance_pkey",
@@ -97,6 +80,10 @@ export default class compliance extends Model {
                         name: "idx_compliance_tenant_framework_control",
                         unique: true,
                         fields: [{ name: "tenant_id" }, { name: "framework" }, { name: "control_id" }],
+                    },
+                    {
+                        name: "idx_compliance_tenant_id",
+                        fields: [{ name: "tenant_id" }],
                     },
                 ],
             }

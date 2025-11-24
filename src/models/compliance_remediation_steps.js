@@ -1,15 +1,19 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class compliance_remediation_steps extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
-                compliance_id: {
+                id: {
                     type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
+                },
+                compliance_id: {
+                    type: DataTypes.TEXT,
+                    allowNull: false,
                     references: {
                         model: "compliance",
                         key: "id",
@@ -17,12 +21,21 @@ export default class compliance_remediation_steps extends Model {
                 },
                 step_order: {
                     type: DataTypes.INTEGER,
-                    allowNull: false,
-                    primaryKey: true,
+                    allowNull: true,
                 },
                 step_description: {
                     type: DataTypes.TEXT,
-                    allowNull: false,
+                    allowNull: true,
+                },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -31,11 +44,12 @@ export default class compliance_remediation_steps extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "compliance_remediation_steps_pkey",
                         unique: true,
-                        fields: [{ name: "compliance_id" }, { name: "step_order" }],
+                        fields: [{ name: "id" }],
                     },
                 ],
             }

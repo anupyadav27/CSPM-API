@@ -1,6 +1,6 @@
 import _sequelize from "sequelize";
 
-const { Model } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class user_roles extends Model {
     static init(sequelize, DataTypes) {
@@ -11,10 +11,7 @@ export default class user_roles extends Model {
                     allowNull: false,
                     primaryKey: true,
                     references: {
-                        model: {
-                            tableName: "users",
-                            schema: "cspm",
-                        },
+                        model: "users",
                         key: "id",
                     },
                 },
@@ -23,12 +20,19 @@ export default class user_roles extends Model {
                     allowNull: false,
                     primaryKey: true,
                     references: {
-                        model: {
-                            tableName: "roles",
-                            schema: "cspm",
-                        },
+                        model: "roles",
                         key: "id",
                     },
+                },
+                created_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updated_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             },
             {
@@ -37,6 +41,7 @@ export default class user_roles extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "user_roles_pkey",

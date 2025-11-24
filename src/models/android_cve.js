@@ -10,9 +10,13 @@ export default class android_cve extends Model {
                     type: DataTypes.TEXT,
                     allowNull: false,
                     primaryKey: true,
+                    references: {
+                        model: "cves",
+                        key: "cve_id",
+                    },
                 },
                 advisory_id: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.TEXT,
                     allowNull: true,
                     references: {
                         model: "android_advisory",
@@ -56,6 +60,7 @@ export default class android_cve extends Model {
                 schema: "cspm",
                 timestamps: false,
                 underscored: true,
+                freezeTableName: true,
                 indexes: [
                     {
                         name: "android_cve_pkey",
