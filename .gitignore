@@ -56,3 +56,4 @@ Thumbs.db
 /src/seeders/
 /core/
 /full_backup.sql
+/src/swagger.js

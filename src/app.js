@@ -8,7 +8,6 @@ import authRoutes from "./routes/authRoutes.js";
 import samlRoutes from "./routes/samlRoutes.js";
 import assetRoutes from "./routes/assetRoutes.js";
 import tenantRoutes from "./routes/tenantRoutes.js";
-import { swaggerDocs } from "./swagger.js";
 import vulnerabilityRoutes from "./routes/vulnerabilityRoutes.js";
 import threatRoutes from "./routes/threatRoutes.js";
 import complianceRoutes from "./routes/complianceRoutes.js";
@@ -40,7 +39,6 @@ app.use("/api", threatRoutes);
 app.use("/api", complianceRoutes);
 app.use("/api", policyRoutes);
 app.use("/api", reportRoutes);
-swaggerDocs(app);
 
 app.use((req, res) => {
     console.warn("Route not found:", req.originalUrl);
